@@ -241,3 +241,6 @@ mongodb/
 
 #VSCode
 .vscode/
+
+#Logfiles
+*.log*

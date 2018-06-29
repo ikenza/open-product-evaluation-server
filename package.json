@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
-    "test": "nyc mocha ./src/entities/**/*.test.js",
+    "test": "nyc mocha",
     "test:resolvers": "nyc mocha ./src/entities/**/*.resolver.test.js",
     "lint": "npm run lint:js",
     "lint:js": "eslint ./",
