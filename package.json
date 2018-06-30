@@ -17,7 +17,10 @@
     "playground": "node playground/playground.js"
   },
   "lint-staged": {
-    "*.js": ["eslint ./", "git add"]
+    "*.js": [
+      "eslint ./",
+      "git add"
+    ]
   },
   "repository": {
     "type": "git",
@@ -53,6 +56,7 @@
     "mongo-seeding": "2.0.4",
     "nodemon": "1.17.5",
     "nyc": "12.0.2",
-    "supertest": "3.1.0"
+    "supertest": "3.1.0",
+    "wait-on": "2.1.0"
   }
 }
