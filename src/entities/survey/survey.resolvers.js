@@ -4,7 +4,8 @@ const questionModel = require('../question/question.model')
 const voteModel = require('../vote/vote.model')
 const contextModel = require('../context/context.model')
 const imageModel = require('../image/image.model')
-const { isUser, isAdmin, userIdIsMatching } = require('../../utils/authUtils')
+const { ADMIN, USER } = require('../../utils/roles')
+const { isUser, userIdIsMatching } = require('../../utils/authUtils')
 const { getMatchingId, createHashFromId } = require('../../utils/idStore')
 const _ = require('underscore')
 
@@ -13,9 +14,14 @@ module.exports = {
     surveys: async (parent, args, { request }, info) => {
       try {
         const { auth } = request
-        if (!isUser(auth)) { throw new Error('Not authorized or no permissions.') }
-        if (isAdmin(auth)) return await surveyModel.get({})
-        return await surveyModel.get({ creator: auth.user.id })
+        switch (auth.role) {
+          case ADMIN:
+            return await surveyModel.get({})
+          case USER:
+            return surveyModel.get({ creator: auth.id })
+          default:
+            throw new Error('Not authorized or no permissions.')
+        }
       } catch (e) {
         throw e
       }
@@ -23,10 +29,16 @@ module.exports = {
     survey: async (parent, { surveyID }, { request }, info) => {
       try {
         const { auth } = request
-        if (!isUser(auth)) { throw new Error('Not authorized or no permissions.') }
         const [survey] = await surveyModel.get({ _id: getMatchingId(surveyID) })
-        if (!userIdIsMatching(auth, `${survey.creator}`)) { throw new Error('Not authorized or no permissions.') }
-        return survey
+        switch (auth.role) {
+          case ADMIN:
+            return survey
+          case USER:
+            if (survey.creator === auth.id) return survey
+            throw new Error('Not authorized or no permissions.')
+          default:
+            throw new Error('Not authorized or no permissions.')
+        }
       } catch (e) {
         throw e
       }
