@@ -34,5 +34,12 @@
         "global-require": "off",
         "import/no-dynamic-require": "off",
         "no-underscore-dangle": "off"
+    },
+    "globals":{
+        "describe":true,
+        "it":true,
+        "beforeAll": true,
+        "beforeEach": true,
+        "expect": true
     }
 }
